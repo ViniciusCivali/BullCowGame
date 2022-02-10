@@ -1,12 +1,23 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
+#include "HiddenWordList.h"
+
+
+/* 
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
+ */
 
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
-    SetupGame();
 
-    // PrintLine(FString::Printf(TEXT("The HiddenWords is: %s"), *HiddenWord)); // Debug line
+    /* 
+    const FString WordListPath = FPaths::ProjectContentDir() / TEXT("WordLists/HiddenWordList.txt");
+    FFileHelper::LoadFileToStringArray(Words, *WordListPath);
+    */
+
+    SetupGame();
 }
 
 void UBullCowCartridge::OnInput(const FString& Input)// When the player hits enter
@@ -29,23 +40,72 @@ void UBullCowCartridge::OnInput(const FString& Input)// When the player hits ent
 void UBullCowCartridge::SetupGame()
 {
     // Welcoming the player
-    PrintLine(TEXT("Welcome to Bull Cows!")); 
+    PrintLine(TEXT("Welcome to Bull Cows!"));
+
+    // Slect only isograms from the words list
+    GetValidWords();
+
+    SelectWord();
+
+    // PrintLine(FString::Printf(TEXT("The HiddenWords is: %s."), *HiddenWord)); // Debug
     
-    HiddenWord = TEXT("cake");
     Lives = HiddenWord.Len();
     Damage = 1;
     bGameOver = false;
 
-    PrintLine(TEXT("Guess the %i latter word!"), HiddenWord.Len()); // Debug line
+    PrintLine(TEXT("Guess the %i latter word!"), HiddenWord.Len());
     PrintLine(TEXT("You have %i lives."), Lives);
-    PrintLine(TEXT("Type in your guess and \npress Enter to continue..."));
+    PrintLine(TEXT("Press Tab to type your guess and \npress Enter to continue..."));
 
     // const char HW[] = "cakes";
     // const TCHAR HWa[] = TEXT("cakes");
     // const TCHAR HWb[] = {TEXT('c'), TEXT('a'), TEXT('k'), TEXT('e'), TEXT('s'), TEXT('\0')};
      
 }
- 
+
+void UBullCowCartridge::GetValidWords()
+{
+    TSet<FString> RepeatSet;
+
+    for (FString Word : WordList)
+    {
+        if(IsIsogram(Word) && Word.Len() >= 4 && Word.Len() <= 8){
+
+            if(!RepeatSet.Contains(Word))
+            {
+                ValidWords.Emplace(Word);
+                RepeatSet.Emplace(Word);
+            }
+        }
+    }
+
+    // PrintLine(TEXT("***Words: %i"), WordList.Num()); // Debug
+    // PrintLine(TEXT("***Valid words: %i"), ValidWords.Num()); // Debug
+}
+
+void UBullCowCartridge::SelectWord()
+{
+    //If not empty
+    if(ValidWords.Num() > 0)
+    {
+        //Get a random word inside the bounds os the ValidWords range
+        int RandomIndex = FMath::RandRange(0,ValidWords.Num() - 1);
+
+        // PrintLine(TEXT("***The word is: %s"), *ValidWords[RandomIndex]); //Debug
+
+        // Return the random isogram word
+        HiddenWord =  ValidWords[RandomIndex];
+        
+        // Removing the selected word
+        ValidWords.RemoveAt(RandomIndex);
+    }
+    else
+    {
+        // Default word
+        HiddenWord =  TEXT("cake");
+    }
+}
+
 void UBullCowCartridge::EndGame()
 {
     bGameOver = true;
@@ -68,7 +128,7 @@ void UBullCowCartridge::Lost()
     EndGame();
 }
 
-void UBullCowCartridge:: LossLive()
+void UBullCowCartridge::LossLive()
 {
     Lives -= Damage;
     PrintLine(TEXT("Less a life, %i left"), Lives);
@@ -98,18 +158,18 @@ bool UBullCowCartridge::SameLen(const FString& Word) const
 
 bool UBullCowCartridge::IsIsogram(const FString& Word) const
 {
-    TSet<char> HS;
+    TSet<char> LettersSet;
 
-    for(auto& y : Word)
+    for(auto& Letter : Word)
     {
-        if(HS.Contains(y))
+        if(LettersSet.Contains(Letter))
         {
             // PrintLine(TEXT("Não é isograma")); // Debug
             return false;
         }
         else
         {
-            HS.Emplace(y);
+            LettersSet.Emplace(Letter);
         }
     }
 
