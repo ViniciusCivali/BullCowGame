@@ -20,7 +20,7 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     SetupGame();
 }
 
-void UBullCowCartridge::OnInput(const FString& Input)// When the player hits enter
+void UBullCowCartridge::OnInput(const FString& PlayerInput)// When the player hits enter
 {
     /*
     If game is not over then do else Checking PlayerGuess
@@ -33,7 +33,7 @@ void UBullCowCartridge::OnInput(const FString& Input)// When the player hits ent
     }
     else
     {
-        ProcessGuess(Input);
+        ProcessGuess(PlayerInput);
     }  
 }
 
