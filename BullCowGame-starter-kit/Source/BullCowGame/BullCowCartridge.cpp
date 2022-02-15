@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
 #include "HiddenWordList.h"
+// #include "Math/UnrealMathUtility.h"
 
 
 /* 
@@ -39,20 +40,20 @@ void UBullCowCartridge::OnInput(const FString& PlayerInput)// When the player hi
 
 void UBullCowCartridge::SetupGame()
 {
-    // Welcoming the player
-    PrintLine(TEXT("Welcome to Bull Cows!"));
+    // Slect only isograms from the words list - First method
+    // GetValidWords();
+    // SelectWord();
 
-    // Slect only isograms from the words list
-    GetValidWords();
-
-    SelectWord();
-
-    // PrintLine(FString::Printf(TEXT("The HiddenWords is: %s."), *HiddenWord)); // Debug
     
-    Lives = HiddenWord.Len();
+    // Slect only isograms from the words list - Second method
+    HiddenWord = SelectWord_recursion();
+    PrintLine(TEXT("***The HiddenWords is: %s."), *HiddenWord); // Debug
+    Lives = HiddenWord.Len() * 2;
     Damage = 1;
     bGameOver = false;
 
+    // Welcoming the player
+    PrintLine(TEXT("Welcome to Bull Cows!"));
     PrintLine(TEXT("Guess the %i latter word!"), HiddenWord.Len());
     PrintLine(TEXT("You have %i lives."), Lives);
     PrintLine(TEXT("Press Tab to type your guess and \npress Enter to continue..."));
@@ -61,6 +62,20 @@ void UBullCowCartridge::SetupGame()
     // const TCHAR HWa[] = TEXT("cakes");
     // const TCHAR HWb[] = {TEXT('c'), TEXT('a'), TEXT('k'), TEXT('e'), TEXT('s'), TEXT('\0')};
      
+}
+
+FString UBullCowCartridge::SelectWord_recursion()
+{
+    FString Word = WordList[FMath::RandRange(0,WordList.Num() - 1)];
+
+    if (IsIsogram(Word) && Word.Len() >= 4 && Word.Len() <= 8)
+    {
+        return Word;
+    }
+    else
+    {
+        return SelectWord_recursion();
+    }
 }
 
 void UBullCowCartridge::GetValidWords()
@@ -93,7 +108,7 @@ void UBullCowCartridge::SelectWord()
 
         // PrintLine(TEXT("***The word is: %s"), *ValidWords[RandomIndex]); //Debug
 
-        // Return the random isogram word
+        // Select the random isogram word
         HiddenWord =  ValidWords[RandomIndex];
         
         // Removing the selected word
@@ -196,6 +211,31 @@ bool UBullCowCartridge::CehckGuessValidity(const FString& Guess) const
     return bValidity;
 }
 
+void UBullCowCartridge::GetBullCows(const FString& Guess) const
+{
+    FBullCowCont Count;
+
+    for (int32 GuessIndex = 0; GuessIndex < Guess.Len(); GuessIndex++)
+    {
+        if (Guess[GuessIndex] == HiddenWord[GuessIndex])
+        {
+            Count.Bulls++;
+            continue;
+        }
+
+        for (int32 HiddenIndex = 0; HiddenIndex < HiddenWord.Len(); HiddenIndex++)
+        {
+            if (Guess[GuessIndex] == HiddenWord[HiddenIndex])
+            {
+                Count.Cows++;
+                break;
+            }
+        }
+    }
+
+    PrintLine(TEXT("You have %i Bulls and %i Cows"), Count.Bulls, Count.Cows);
+}
+
 void UBullCowCartridge::ProcessGuess(const FString& Guess)
 {
     if(SameWords(Guess))
@@ -204,6 +244,8 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess)
     }
     else if(CehckGuessValidity(Guess))
     {
+        GetBullCows(Guess);
+
         if(Lives > Damage)
         {
             LossLive();
