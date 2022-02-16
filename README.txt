@@ -7,3 +7,4 @@ The game is played in turns by two opponents who aim to decipher the other's sec
 Wikipedia: " https://en.wikipedia.org/wiki/Bulls_and_Cows "
 
 Thanks for the course: " https://www.gamedev.tv/p/learn-unreal-engine-c-developer-4-22-for-video-game-development/?coupon_code=FIFTY "
+
