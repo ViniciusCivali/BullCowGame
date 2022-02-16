@@ -12,7 +12,7 @@ Thanks for the course: " https://www.gamedev.tv/p/learn-unreal-engine-c-develope
 
 In that project, I could learn more C++ and put it in practice.
 I did all the function that do the game laws.
-Including, I was able to use some good algorithms ideas that I learn from my software developer experience, like use Set to check if a word is in fact isogram or even rather than filter all list of words select one and if isn't isogram to use recursion, what for an ultra casual game is a good approach in that context, seen the fact that isn't a game played many times normally.
+Including, I was able to use some good algorithms ideas that I learn from my software developer experience, like use Set to check if a word is in fact isogram or even rather than filter all list of words select one word from the list and if isn't isogram to use recursion, what for an ultra casual game is a good approach in that context, seen the fact that isn't a game played many times normally.
 I was able to test different implementations for the same functions in addition to always having object-oriented programming in mind.
 In addition, the course provides an introduction to setting and creating environments, but it is very introductory.
 
