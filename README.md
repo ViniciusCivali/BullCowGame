@@ -11,7 +11,8 @@ Wikipedia: " https://en.wikipedia.org/wiki/Bulls_and_Cows "
 Thanks for the course: " https://www.gamedev.tv/p/learn-unreal-engine-c-developer-4-22-for-video-game-development/?coupon_code=FIFTY "
 
 In that project, I could learn more C++ and put it in practice.
-I did all the function that do the game laws, including I was able to use some good algorithms ideas that I learn from my software developer experience, like use Set to check if a word is in fact isogram or even rather than filter all list of words select one and if isn't isogram to use recursion, what for an ultra casual game is a good approach in that context, seen the fact that isn't a game played many times normally.
+I did all the function that do the game laws.
+Including, I was able to use some good algorithms ideas that I learn from my software developer experience, like use Set to check if a word is in fact isogram or even rather than filter all list of words select one and if isn't isogram to use recursion, what for an ultra casual game is a good approach in that context, seen the fact that isn't a game played many times normally.
 I was able to test different implementations for the same functions in addition to always having object-oriented programming in mind.
 
 Reception screen with DEBUG on.
